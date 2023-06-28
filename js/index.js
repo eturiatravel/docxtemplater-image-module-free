@@ -133,7 +133,7 @@ var ImageModule = function () {
 			} else if ((typeof tagValue === "undefined" ? "undefined" : _typeof(tagValue)) === "object") {
 				return this.getRenderedPart(part, tagValue.rId, tagValue.sizePixel);
 			}
-			
+
 			var imgManager = new ImgManager(this.zip, options.filePath, this.xmlDocuments, this.fileType);
 			var imgBuffer = this.options.getImage(tagValue, part.value);
 			var rId = imgManager.addImageRels(this.getNextImageName(), imgBuffer);
@@ -149,11 +149,18 @@ var ImageModule = function () {
 			if (!part.type === "placeholder" || part.module !== moduleName) {
 				return null;
 			}
-			var value = options.scopeManager.getValue(part.value, {
-				part: part
-			});
+			var value = undefined;
+			try {
+				value = options.scopeManager.getValue(part.value, {
+					part: part
+				});
+			} catch (e) {
+				console.warn("Could not resolve tag value");
+			}
 			if (!value) {
-				return { value: this.fileTypeConfig.tagTextXml };
+				return new Promise(function (resolve) {
+					resolve("");
+				});
 			}
 			return new Promise(function (resolve) {
 				var imgBuffer = _this.options.getImage(value, part.value);

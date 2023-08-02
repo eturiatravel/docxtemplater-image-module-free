@@ -25,9 +25,9 @@ function getInnerDocx(_ref) {
 
 function getInnerPptx(_ref2) {
 	var part = _ref2.part,
-	    left = _ref2.left,
-	    right = _ref2.right,
-	    postparsed = _ref2.postparsed;
+		left = _ref2.left,
+		right = _ref2.right,
+		postparsed = _ref2.postparsed;
 
 	var xmlString = postparsed.slice(left + 1, right).reduce(function (concat, item) {
 		return concat + item.value;
@@ -125,9 +125,7 @@ var ImageModule = function () {
 			if (!part.type === "placeholder" || part.module !== moduleName) {
 				return null;
 			}
-			var tagValue = options.scopeManager.getValue(part.value, {
-				part: part
-			});
+			var tagValue = options.scopeManager.getValue(part.value, { part });
 			if (!tagValue) {
 				return { value: this.fileTypeConfig.tagTextXml };
 			} else if ((typeof tagValue === "undefined" ? "undefined" : _typeof(tagValue)) === "object") {

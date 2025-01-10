@@ -8,7 +8,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var templates = require("./templates");
 var DocUtils = require("docxtemplater").DocUtils;
-var DOMParser = require("xmldom").DOMParser;
+var DOMParser = require("@xmldom/xmldom").DOMParser;
 
 function isNaN(number) {
 	return !(number === number);
@@ -133,7 +133,6 @@ var ImageModule = function () {
 			} else if ((typeof tagValue === "undefined" ? "undefined" : _typeof(tagValue)) === "object") {
 				return this.getRenderedPart(part, tagValue.rId, tagValue.sizePixel);
 			}
-
 			var imgManager = new ImgManager(this.zip, options.filePath, this.xmlDocuments, this.fileType);
 			var imgBuffer = this.options.getImage(tagValue, part.value);
 			var rId = imgManager.addImageRels(this.getNextImageName(), imgBuffer);
@@ -149,18 +148,11 @@ var ImageModule = function () {
 			if (!part.type === "placeholder" || part.module !== moduleName) {
 				return null;
 			}
-			var value = undefined;
-			try {
-				value = options.scopeManager.getValue(part.value, {
-					part: part
-				});
-			} catch (e) {
-				console.warn("Could not resolve tag value");
-			}
+			var value = options.scopeManager.getValue(part.value, {
+				part: part
+			});
 			if (!value) {
-				return new Promise(function (resolve) {
-					resolve("");
-				});
+				return { value: this.fileTypeConfig.tagTextXml };
 			}
 			return new Promise(function (resolve) {
 				var imgBuffer = _this.options.getImage(value, part.value);
